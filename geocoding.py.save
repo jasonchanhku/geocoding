@@ -1,0 +1,52 @@
+import pandas as pd
+import googlemaps
+from datetime import datetime
+import urllib.request
+import json
+
+df = pd.read_excel('mapping_parsed_final_test_tableau.xlsx')
+
+df = df.drop(['AUM'], axis =1)
+
+#print(df.head())
+
+file = open('apikey.txt', 'r')
+
+api = file.read()
+
+#print(api)
+
+#gmaps = googlemaps.Client(key=api)
+
+#response = urllib.request.urlopen('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAMQpf2O3cpC-7O_bDjj1t9OMSsHJhTDNE')
+
+#geocode_result = json.load(response)
+
+#print(geocode_result['results'][0]['geometry']['location']['lat'])
+
+
+lat = []
+long = []
+
+for row in range(0, df.shape[0]):
+	response=urllib.request.urlopen('https://maps.googleapis.com/maps/api/geocode/json?address='+df.iloc[row]['Area'].replace(' ', '+')+',+'+df.iloc[row]['Region'].replace(' ', '+')+',+'+'Hong+Kong'+'&key='+api)
+	#response = urllib.request.urlopen('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyAMQpf2O3cpC-7O_bDjj1t9OMSsHJhTDNE') 
+	geocode_result = json.load(response)
+	print('row no.{} lat is : {} and long is : {}'.format(row+1,x, y))
+        print('https://maps.googleapis.com/maps/api/geocode/json?address='+df.iloc[row]['Area'].replace(' ', '+')+',+'+df.iloc[row]['Region'].replace(' ', '+')+',+'+'Hong+Kong'+'&key='+api)
+        print(geocode_result
+	x = geocode_result['results'][0]['geometry']['location']['lat']
+	y = geocode_result['results'][0]['geometry']['location']['lng'] 
+	lat.append(x)
+	long.append(y)
+	print('row no.{} lat is : {} and long is : {}'.format(row+1,x, y))
+	print('https://maps.googleapis.com/maps/api/geocode/json?address='+df.iloc[row]['Area'].replace(' ', '+')+',+'+df.iloc[row]['Region'].replace(' ', '+')+',+'+'Hong+Kong'+'&key='+api)
+	print(geocode_result)
+
+print('All coordinates successfully generated via geocoding')
+
+print(lat)
+print(long)
+
+
+
